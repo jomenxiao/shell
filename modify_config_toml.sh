@@ -1,12 +1,27 @@
 #!/bin/bash
+#use : ./modify_config_toml.sh case db_host_ip:10.0.0.1 db_host_port:3306 db_user:root db_password:   config.toml
 
 STABILITY_TESTER=$1
-DB_HOST_IP="$(echo $2 |awk -F ":" '{print $2}')"
-DB_HOST_PORT="$(echo $3 |awk -F ":" '{print $2}')"
-DB_USER="$(echo $4 |awk -F ":" '{print $2}')"
-DB_PASSWORD="$(echo $5 |awk -F ":" '{print $2}')"
+TIDB_IMAGE=$2
+TIKV_IMAGE=$3
+PD_IMAGE=$4
+CLOUD_MANAGER_ADDR=$5
 
 CONFIG_TOML_FILE=$6
+
+chmod +x manager
+./manager \
+    -cmd create \
+    -cloud-manager-addr ${CLOUD_MANAGER_ADDR} \
+    -tidb-version ${TIDB_IMAGE} \
+    -tikv-version ${TIKV_IMAGE} \
+    -pd-version ${PD_IMAGE} \
+        >tidb_info
+
+db_host_ip=$(cat tidb_info |head -n 1 |awk '{print $2}')
+db_host_port=$(cat tidb_info |head -n 2 |tail -n 1 |awk '{print $2}')
+db_host_user="root"
+db_host_password=""
 
 
 
@@ -21,8 +36,8 @@ else
 fi
 
 
-sed -i  -e "s/host.*/host = \"${DB_HOST_IP}\"/g" \
-        -e "s/port.*/port = \"${DB_HOST_PORT}\"/g" \
-        -e "s/user.*/user = \"${DB_USER}\"/g" \
-        -e "s/password.*/password = \"${DB_PASSWORD}\"/g" \
+sed -i  -e "s/host.*/host = \"${db_host_ip}\"/g" \
+        -e "s/port.*/port = \"${db_host_port}\"/g" \
+        -e "s/user.*/user = \"${db_host_user}\"/g" \
+        -e "s/password.*/password = \"${db_host_password}\"/g" \
             ${CONFIG_TOML_FILE}
