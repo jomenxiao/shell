@@ -1,5 +1,5 @@
 #!/bin/bash
-#use : ./modify_config_toml.sh case db_host_ip:10.0.0.1 db_host_port:3306 db_user:root db_password:   config.toml
+#use : ./modify_config_toml.sh case tidb_image tikv_image pd_image cloud_manger_addr dir_name_date manager_operateor config.toml
 
 STABILITY_TESTER=$1
 TIDB_IMAGE=$2
@@ -10,6 +10,11 @@ DIR_NAME_DATE=$6
 MANAGER_OPERATOR=$7
 
 CONFIG_TOML_FILE=$8
+
+if [[ $# -ne 8 ]];then
+    echo "error params number,it's 8"
+    exit -1
+fi
 
 if [[ ${MANAGER_OPERATOR} == "create" ]];then
     chmod +x manager
