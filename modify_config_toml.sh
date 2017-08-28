@@ -6,7 +6,7 @@ TIDB_IMAGE=$2
 TIKV_IMAGE=$3
 PD_IMAGE=$4
 CLOUD_MANAGER_ADDR=$5
-DIR_NAME_DATE="${6//_/-/}"
+DIR_NAME_DATE="${6//_/-}"
 MANAGER_OPERATOR=$7
 
 CONFIG_TOML_FILE=$8
@@ -29,6 +29,7 @@ if [[ ${MANAGER_OPERATOR} == "create" ]];then
     manager_exit=$?
     if [ ${manager_exit} -ne 0 ];then
         echo "can not create tidb cluster"
+        cat tidb_info
         exit -2
     fi
     db_host_ip=$(head -n 1 tidb_info   |awk '{print $2}')
