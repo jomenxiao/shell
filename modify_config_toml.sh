@@ -32,8 +32,8 @@ if [[ ${MANAGER_OPERATOR} == "create" ]];then
         cat tidb_info
         exit -2
     fi
-    db_host_ip=$(head -n 1 tidb_info   |awk '{print $2}')
-    db_host_port=$(head -n 2 tidb_info |tail -n 1 |awk '{print $2}')
+    db_host_ip=$(grep "host:" tidb_info   |awk '{print $2}')
+    db_host_port=$(grep "port:" tidb_info |tail -n 1 |awk '{print $2}')
     db_host_user="root"
     db_host_password=""
     if [[ ${STABILITY_TESTER} =~ sysbench|sqllogic_test ]];then
