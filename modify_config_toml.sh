@@ -46,7 +46,7 @@ if [[ ${MANAGER_OPERATOR} == "create" ]];then
             "${CONFIG_TOML_FILE}"
     fi
     sed -i  -e "s/host.*/host = \"${db_host_ip}\"/g" \
-        -e "s/port.*/port = \"${db_host_port}\"/g" \
+        -e "s/port.*/port = ${db_host_port}/g" \
         -e "s/user.*/user = \"${db_host_user}\"/g" \
         -e "s/password.*/password = \"${db_host_password}\"/g" \
         "${CONFIG_TOML_FILE}"
