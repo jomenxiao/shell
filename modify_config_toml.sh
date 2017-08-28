@@ -6,8 +6,9 @@ TIDB_IMAGE=$2
 TIKV_IMAGE=$3
 PD_IMAGE=$4
 CLOUD_MANAGER_ADDR=$5
+DIR_NAME=$6
 
-CONFIG_TOML_FILE=$6
+CONFIG_TOML_FILE=$7
 
 chmod +x manager
 ./manager \
@@ -16,6 +17,7 @@ chmod +x manager
     -tidb-version ${TIDB_IMAGE} \
     -tikv-version ${TIKV_IMAGE} \
     -pd-version ${PD_IMAGE} \
+    -name ${DIR_NAME} \
         >tidb_info
 
 db_host_ip=$(cat tidb_info |head -n 1 |awk '{print $2}')
