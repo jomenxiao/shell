@@ -6,7 +6,7 @@ TIDB_IMAGE=$2
 TIKV_IMAGE=$3
 PD_IMAGE=$4
 CLOUD_MANAGER_ADDR=$5
-DIR_NAME_DATE=$6
+DIR_NAME_DATE="${6//_/-/}"
 MANAGER_OPERATOR=$7
 
 CONFIG_TOML_FILE=$8
@@ -26,7 +26,11 @@ if [[ ${MANAGER_OPERATOR} == "create" ]];then
         -pd-version "${PD_IMAGE}" \
         -name "${DIR_NAME_DATE}" \
         >tidb_info
-
+    manager_exit=$?
+    if [ ${manager_exit} -ne 0 ];then
+        echo "can not create tidb cluster"
+        exit -2
+    fi
     db_host_ip=$(head -n 1 tidb_info   |awk '{print $2}')
     db_host_port=$(head -n 2 tidb_info |tail -n 1 |awk '{print $2}')
     db_host_user="root"
@@ -47,6 +51,11 @@ if [[ ${MANAGER_OPERATOR} == "create" ]];then
         "${CONFIG_TOML_FILE}"
 elif [[ ${MANAGER_OPERATOR} == "delete" ]];then
     ./manager -name "${DIR_NAME_DATE}" -cmd delete
+    manager_exit=$?
+    if [ ${manager_exit} -ne 0 ];then
+        echo "can not delete tidb cluster"
+        exit -2
+    fi
 
 else
     echo "error params $*"
