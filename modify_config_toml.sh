@@ -13,6 +13,7 @@ CONFIG_TOML_FILE=$8
 
 
 TIDB_COUNT=1
+PD_COUNT=1
 
 if [[ $# -ne 8 ]];then
     echo "error params number,it's 8"
@@ -29,6 +30,7 @@ if [[ ${MANAGER_OPERATOR} == "create" ]];then
         -pd-version "${PD_IMAGE}" \
         -name "${DIR_NAME_DATE}" \
         -tidb-count ${TIDB_COUNT} \
+        -pd-count ${PD_COUNT} \
         >tidb_info
     manager_exit=$?
     if [ ${manager_exit} -ne 0 ];then
