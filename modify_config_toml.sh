@@ -16,10 +16,10 @@ TIDB_COUNT=1
 PD_COUNT=1
 TIKV_COUNT=5
 
-if [[ $# -ne 8 ]];then
-    echo "error params number,it's 8"
-    exit -1
-fi
+#if [[ $# -ne 8 ]];then
+#    echo "error params number,it's 8"
+#    exit -1
+#fi
 
 if [[ ${MANAGER_OPERATOR} == "create" ]];then
     chmod +x manager
