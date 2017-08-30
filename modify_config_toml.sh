@@ -44,15 +44,25 @@ if [[ ${MANAGER_OPERATOR} == "create" ]];then
     db_host_port=$(grep "port:" tidb_info |tail -n 1 |awk '{print $2}')
     db_host_user="root"
     db_host_password=""
+
+    sed -i  -e '/\[suite\]/{n;s/names.*/names = \[\]/}' \
+        -e "/\[serial_suite\]/{n;s/names.*/names = \[\]/}" \
+        "${CONFIG_TOML_FILE}"
     for _STABILITY_TESTER in ${STABILITY_TESTER//---/  }
     do
         if [[ ${_STABILITY_TESTER} =~ sysbench|sqllogic_test ]];then
-            sed -i  -e '/\[suite\]/{n;s/names.*/names = \[\]/}' \
-                -e "/\[serial_suite\]/{n;s/names.*/names = \[ \"${_STABILITY_TESTER}\" \]/}" \
+            sed -i  \
+                -e "/\[serial_suite\]/{n;s/names.*=.*\[.*\".*\"/&\,\"${_STABILITY_TESTER}\"/}" \
+                "${CONFIG_TOML_FILE}"
+            sed -i  \
+                -e "/\[serial_suite\]/{n;s/names.*=.*\[\]/names = \[\"${_STABILITY_TESTER}\"\]/}" \
                 "${CONFIG_TOML_FILE}"
         else
-            sed -i  -e "/\[suite\]/{n;s/names.*/names = \[ \"${_STABILITY_TESTER}\" \]/}" \
-                -e "/\[serial_suite\]/{n;s/names.*/names = \[ \]/}" \
+            sed -i \
+                -e "/\[suite\]/{n;s/names.*=.*\[.*\".*\"/&\,\"${_STABILITY_TESTER}\"/}" \
+                "${CONFIG_TOML_FILE}"
+            sed -i \
+                -e "/\[suite\]/{n;s/names.*=.*\[\]/names = \[ \"${_STABILITY_TESTER}\" \]/}" \
                 "${CONFIG_TOML_FILE}"
         fi
     done
