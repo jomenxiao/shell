@@ -15,6 +15,7 @@ CONFIG_TOML_FILE=$8
 TIDB_COUNT=1
 PD_COUNT=1
 TIKV_COUNT=5
+MANAGER_LABEL=1
 
 #if [[ $# -ne 8 ]];then
 #    echo "error params number,it's 8"
@@ -33,6 +34,7 @@ if [[ ${MANAGER_OPERATOR} == "create" ]];then
         -tidb-count ${TIDB_COUNT} \
         -pd-count ${PD_COUNT} \
         -tikv-count ${TIKV_COUNT} \
+        -label ${MANAGER_LABEL} \
         >tidb_info
     manager_exit=$?
     if [ ${manager_exit} -ne 0 ];then
