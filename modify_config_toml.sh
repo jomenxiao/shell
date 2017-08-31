@@ -1,5 +1,5 @@
 #!/bin/bash
-#use : ./modify_config_toml.sh case tidb_image tikv_image pd_image cloud_manger_addr dir_name_date manager_operateor config.toml
+#use : ./modify_config_toml.sh case tidb_image tikv_image pd_image cloud_manger_addr dir_name_date manager_operateor node config.toml
 
 STABILITY_TESTER=$1
 TIDB_IMAGE=$2
@@ -8,14 +8,13 @@ PD_IMAGE=$4
 CLOUD_MANAGER_ADDR=$5
 DIR_NAME_DATE="${6//_/-}"
 MANAGER_OPERATOR=$7
-
-CONFIG_TOML_FILE=$8
+MANAGER_LABEL=$8
+CONFIG_TOML_FILE=$9
 
 
 TIDB_COUNT=1
 PD_COUNT=1
 TIKV_COUNT=5
-MANAGER_LABEL=1
 
 #if [[ $# -ne 8 ]];then
 #    echo "error params number,it's 8"
@@ -76,6 +75,7 @@ if [[ ${MANAGER_OPERATOR} == "create" ]];then
 elif [[ ${MANAGER_OPERATOR} == "delete" ]];then
     ./manager -name "${DIR_NAME_DATE}" \
               -cloud-manager-addr "${CLOUD_MANAGER_ADDR}" \
+              -label ${MANAGER_LABEL} \
               -cmd delete 
     manager_exit=$?
     if [ ${manager_exit} -ne 0 ];then
