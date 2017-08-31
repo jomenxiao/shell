@@ -72,7 +72,9 @@ if [[ ${MANAGER_OPERATOR} == "create" ]];then
         -e "s/password.*/password = \"${db_host_password}\"/g" \
         "${CONFIG_TOML_FILE}"
 elif [[ ${MANAGER_OPERATOR} == "delete" ]];then
-    ./manager -name "${DIR_NAME_DATE}" -cmd delete
+    ./manager -name "${DIR_NAME_DATE}" \
+              -cloud-manager-addr "${CLOUD_MANAGER_ADDR}" \
+              -cmd delete 
     manager_exit=$?
     if [ ${manager_exit} -ne 0 ];then
         echo "can not delete tidb cluster"
